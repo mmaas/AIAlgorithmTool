@@ -1,0 +1,1 @@
+This repository includes a framework for showing machine learning techniques with a visualization. It is based on JBox2D, the Box2D Java port, and OpenGL. The example implementation simulates two dimensional cars which drives on a random track. The cars are optimized with a genetic algorithm. Created for my bachelor thesis within AGKI at the University of Koblenz.
