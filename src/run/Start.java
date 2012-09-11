@@ -19,6 +19,7 @@
 package run;
 
 import geneticalgorithm.GeneticAlgorithm;
+import geneticalgorithm.LinesAlgorithmDataFactory;
 import view.*;
 import model.*;
 import control.*;
@@ -57,7 +58,8 @@ public class Start {
 		control = new Control(p, g, m);
 		control.initPhysic(1.0f / 60.0f, 8, 3);
 
-		g = new GeneticAlgorithm(5, 8, 50, 8, 5, control);
+		LinesAlgorithmDataFactory factory = new LinesAlgorithmDataFactory(5f,8f,8f,5);
+		g = new GeneticAlgorithm(50, factory, control);
 
 		v = new View(control, m, g, control.getPhysicWorld());
 		control.addView(v);

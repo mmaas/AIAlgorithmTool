@@ -33,10 +33,10 @@ public interface Fitness {
 	 * to a specific value depending on the best fitness from the last
 	 * generation
 	 * 
-	 * @param g
+	 * @param gA
 	 *            genom of car to bested
 	 * @param best
 	 *            best fitness from last generation
 	 */
-	public void fitness(GeneticAlgorithmData g, float best);
+	public void fitness(GeneticAlgorithmData gA);
 }

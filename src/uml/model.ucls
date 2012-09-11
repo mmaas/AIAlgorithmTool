@@ -1,4 +1,4 @@
-<class-diagram version="1.0.9" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+<class-diagram version="1.0.10" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" corner="BOTTOM_RIGHT" language="java" name="model.Model" project="AIAlgorithmTool" 
     file="/AIAlgorithmTool/src/model/Model.java" binary="false">    
@@ -32,15 +32,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="model.GeneticAlgorithmData" project="AIAlgorithmTool" 
-    file="/AIAlgorithmTool/src/model/GeneticAlgorithmData.java" binary="false">    
-    <position height="-1" width="-1" x="878" y="228"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="model.AlgorithmData" project="AIAlgorithmTool" 
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="model.AlgorithmData" project="AIAlgorithmTool" 
     file="/AIAlgorithmTool/src/model/AlgorithmData.java" binary="false">    
     <position height="-1" width="-1" x="464" y="225"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -48,7 +40,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="model.Part" project="AIAlgorithmTool" 
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="model.Part" project="AIAlgorithmTool" 
     file="/AIAlgorithmTool/src/model/Part.java" binary="false">    
     <position height="-1" width="-1" x="420" y="95"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -56,24 +48,36 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <generalization id="8">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="model.LinesAlgorithmData" project="AIAlgorithmTool" 
+    file="/AIAlgorithmTool/src/model/LinesAlgorithmData.java" binary="false">    
+    <position height="-1" width="-1" x="1152" y="228"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="model.GeneticAlgorithmData" project="AIAlgorithmTool" 
+    file="/AIAlgorithmTool/src/model/GeneticAlgorithmData.java" binary="false">    
+    <position height="-1" width="-1" x="731" y="226"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
   <association id="9">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="10" name="parts"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="10" name="vehicle"/>      
       <multiplicity id="11" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="false" multiplicity="true"/>  
   </association>  
   <association id="12">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="13" name="v"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="13" name="parts"/>      
+      <multiplicity id="14" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="false" multiplicity="true"/>  
   </association>  
   <association id="15">    
@@ -87,9 +91,9 @@
     <display labels="false" multiplicity="true"/>  
   </association>  
   <association id="18">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="19" name="vehicle"/>      
-      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="19" name="v"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="false" multiplicity="true"/>  
@@ -99,12 +103,20 @@
       <attribute id="22" name="parts"/>      
       <multiplicity id="23" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="false" multiplicity="true"/>  
   </association>  
   <generalization id="24">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="25">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     visibility="true">    

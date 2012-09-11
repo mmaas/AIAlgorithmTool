@@ -59,6 +59,16 @@ public class Physic {
 	public float timestep;
 	public int velIt, posIt;
 
+	/***
+	 * Simple constructor
+	 * 
+	 * @param worldData
+	 *            The world to be simulated
+	 * @param gravityX
+	 *            gravity in x direction
+	 * @param gravityY
+	 *            gravity in y direction
+	 */
 	public Physic(model.World worldData, float gravityX, float gravityY) {
 		gravity = new Vec2(gravityX, gravityY);
 		physicWorld = new World(gravity, true);
@@ -66,7 +76,6 @@ public class Physic {
 		vehicles = new Vector<Body>();
 
 		addWorld(worldData);
-		this.worldData = worldData;
 	}
 
 	/***
@@ -84,6 +93,23 @@ public class Physic {
 	}
 
 	/***
+	 * Removes all simulated Vehicles
+	 */
+	public void removeVehicle() {
+		Body b = physicWorld.getBodyList();
+
+		while (b != null) {
+			if (b.m_type == BodyType.DYNAMIC) {
+				b.setActive(false);
+				physicWorld.destroyBody(b);
+			}
+			b = b.getNext();
+		}
+
+		vehicles.clear();
+	}
+
+	/***
 	 * Takes a world and creates physical represantation
 	 * 
 	 * @param w
@@ -92,6 +118,7 @@ public class Physic {
 	 */
 	public void addWorld(model.World w) {
 		factory.createParts(w);
+		worldData = w;
 	}
 
 	/***

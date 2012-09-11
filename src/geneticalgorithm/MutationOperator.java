@@ -42,9 +42,9 @@ public class MutationOperator implements Mutation {
 	public MutationOperator(GeneticAlgorithm g) {
 		this.g = g;
 	}
-
 	public void mutate(Vector<GeneticAlgorithmData> nextGeneration) {
 		// TODO Auto-generated method stub
+		LinesAlgorithmDataFactory factory = (LinesAlgorithmDataFactory)g.fac;
 		Random rg = new Random();
 		float r;
 		int toChange, count = 1;
@@ -54,19 +54,19 @@ public class MutationOperator implements Mutation {
 			r = rg.nextFloat();
 			if (r <= (float) g.mutation / 100f) {
 				bits = ga.getFixedInt();
-				toChange = rg.nextInt(g.lineNumber * 3);
+				toChange = rg.nextInt(factory.lineNumber * 3);
 
 				int trys = 0;
-				if (toChange == 0 && g.fixedLength) {
+				if (toChange == 0 && factory.fixedLength) {
 					do {
-						toChange = rg.nextInt(g.lineNumber * 3);
+						toChange = rg.nextInt(factory.lineNumber * 3);
 					} while (toChange == 0);
 				}
 				do {
 					if ((trys % 100) == 99) {
-						toChange = rg.nextInt(g.lineNumber * 3);
+						toChange = rg.nextInt(factory.lineNumber * 3);
 					}
-					if (trys > g.lineNumber*300) {
+					if (trys > factory.lineNumber*300) {
 						fail = true;
 						break;
 					}
@@ -98,4 +98,5 @@ public class MutationOperator implements Mutation {
 			count++;
 		}
 	}
+
 }

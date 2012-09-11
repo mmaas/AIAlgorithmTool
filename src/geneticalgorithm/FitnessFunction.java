@@ -42,8 +42,8 @@ public class FitnessFunction implements Fitness {
 		this.gA = gA;
 	}
 
-	public void fitness(GeneticAlgorithmData g, float best) {
-		Car car = g.createVehicle();
+	public void fitness(GeneticAlgorithmData g) {
+		Car car = (Car) g.createVehicle();
 		car.setActive(true);
 		gA.c.p.addVehicle(car);
 		Body b = gA.c.p.vehicles.get(2);
@@ -84,13 +84,13 @@ public class FitnessFunction implements Fitness {
 		} while (true);
 		gA.c.registeredViews.get(0).pTab.stop(true);
 		if (!gA.showBestcar) {
-			if (best < 1) {
+			if (gA.best < 1) {
 				g.fitness = Math.round(maxPosition * 100.f) / 100.f;
 				g.distance = g.fitness;
-			} else if (maxPosition > best) {
-				g.fitness = best;
+			} else if (maxPosition > gA.best) {
+				g.fitness = gA.best;
 
-				g.fitness += (maxPosition - best) * Math.log(best);
+				g.fitness += (maxPosition - gA.best) * Math.log(gA.best);
 
 				g.fitness = Math.round((g.fitness * 100f) / 100f);
 				g.distance = Math.round(maxPosition * 100.f) / 100.f;

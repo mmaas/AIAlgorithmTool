@@ -97,7 +97,7 @@ public class World {
 				gradient = 0;
 				distance = 0;
 			}
-			if (maxGradient < 0.5f)
+			if (maxGradient < 0.4f)
 				maxGradient = (float) (0.2f + (x / 25) * 0.05);
 			if ((distance > 0f) && gradient / distance > maxGradient) {
 				do {

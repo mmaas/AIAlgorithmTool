@@ -22,8 +22,6 @@ import java.util.Vector;
 
 import model.GeneticAlgorithmData;
 
-import org.jbox2d.common.Vec2;
-
 /***
  * Interface for crossover operations.
  * 
@@ -40,6 +38,5 @@ public interface Crossover {
 	 * @param nextGeneration
 	 *            nextGeneration to be tested
 	 */
-	public void crossover(Vector<Vec2> rating,
-			Vector<GeneticAlgorithmData> nextGeneration);
+	public void crossover(int lastGeneration,Vector<GeneticAlgorithmData> nextGeneration);
 }

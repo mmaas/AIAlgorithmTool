@@ -21,8 +21,6 @@ package geneticalgorithm;
 import java.util.Vector;
 
 import model.GeneticAlgorithmData;
-
-import org.jbox2d.common.Vec2;
 /***
  * Interface for selection operations.
  * 
@@ -32,9 +30,8 @@ import org.jbox2d.common.Vec2;
 public interface Selection {
 	/***
 	 * A selection operator selects members of the old generation and adds them unchanged to the new generation
-	 * @param rating sorted list of normalized rated genoms
+	 * @param lastGeneration old generation from which genoms are selected
 	 * @param nextGeneration next generation to which the selected genoms are added
 	 */
-	public void selection(Vector<Vec2> rating,
-			Vector<GeneticAlgorithmData> nextGeneration);
+	public void selection(int lastGeneration,Vector<GeneticAlgorithmData> nextGeneration);
 }

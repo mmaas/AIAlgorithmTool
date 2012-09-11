@@ -38,13 +38,21 @@ public abstract class Algorithm {
 	 */
 	public Vector<AlgorithmData> aData;
 	/***
+	 * Control for physic simulation
+	 */
+	public Control c;
+	/***
 	 * Panel with information and configuration
 	 */
 	public JTabbedPane p;
-
-	public Algorithm() {
+	/***
+	 * Simple constructor
+	 * @param c control
+	 */
+	public Algorithm(Control c) {
 		// TODO Auto-generated constructor stub
 		aData = new Vector<AlgorithmData>();
+		this.c = c;
 	}
 
 	/***

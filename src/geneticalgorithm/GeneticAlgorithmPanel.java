@@ -19,7 +19,6 @@
 package geneticalgorithm;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -64,8 +63,11 @@ public class GeneticAlgorithmPanel {
 	 * 
 	 * @return view component of genetic algorithm
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	public JTabbedPane createPanel() {
+		final CrossoverOperator cross = (CrossoverOperator) g.cross;
+		final LinesAlgorithmDataFactory factory = (LinesAlgorithmDataFactory)g.fac;
+		
 		// TODO Auto-generated method stub
 		JTabbedPane tabbedpane = new JTabbedPane();
 		tabbedpane.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -91,7 +93,7 @@ public class GeneticAlgorithmPanel {
 		JLabel sliderlabel1 = new JLabel("Maximum length", JLabel.LEFT);
 		sliderlabel1.setToolTipText("How long should the cars be?");
 		JSlider slider1 = new JSlider(JSlider.HORIZONTAL, 1, 8,
-				(int) g.maxLength);
+				(int) factory.maxLength);
 		slider1.setToolTipText("How long should the cars be?");
 		slider1.setMinorTickSpacing(1);
 		slider1.setMajorTickSpacing(7);
@@ -105,10 +107,10 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JSlider source = (JSlider) e.getSource();
 				if (!g.started) {
-					g.maxLength = source.getValue();
+					factory.maxLength = source.getValue();
 					g.changed = true;
 				} else {
-					source.setValue((int) g.maxLength);
+					source.setValue((int) factory.maxLength);
 				}
 			}
 		});
@@ -116,7 +118,7 @@ public class GeneticAlgorithmPanel {
 		JLabel sliderlabel2 = new JLabel("Maximum height", JLabel.LEFT);
 		sliderlabel2.setToolTipText("How high should the cars be?");
 		JSlider slider2 = new JSlider(JSlider.HORIZONTAL, 1, 10,
-				(int) g.maxHeight);
+				(int) factory.maxHeight);
 		slider2.setToolTipText("How high should the cars be?");
 		slider2.setMinorTickSpacing(1);
 		slider2.setMajorTickSpacing(9);
@@ -130,10 +132,10 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JSlider source = (JSlider) e.getSource();
 				if (!g.started) {
-					g.maxHeight = source.getValue();
+					factory.maxHeight = source.getValue();
 					g.changed = true;
 				} else {
-					source.setValue((int) g.maxHeight);
+					source.setValue((int) factory.maxHeight);
 				}
 			}
 		});
@@ -141,7 +143,7 @@ public class GeneticAlgorithmPanel {
 		JLabel sliderlabel3 = new JLabel("Maximum line length", JLabel.LEFT);
 		sliderlabel3.setToolTipText("How long can the perpendicular lines be?");
 		JSlider slider3 = new JSlider(JSlider.HORIZONTAL, 1, 10,
-				(int) g.maxLineLength);
+				(int) factory.maxLineLength);
 		slider3.setToolTipText("How long can the perpendicular lines be?");
 		slider3.setMinorTickSpacing(1);
 		slider3.setMajorTickSpacing(9);
@@ -155,10 +157,10 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JSlider source = (JSlider) e.getSource();
 				if (!g.started) {
-					g.maxLineLength = source.getValue();
+					factory.maxLineLength = source.getValue();
 					g.changed = true;
 				} else {
-					source.setValue((int) g.maxLineLength);
+					source.setValue((int) factory.maxLineLength);
 				}
 			}
 		});
@@ -166,7 +168,7 @@ public class GeneticAlgorithmPanel {
 		JLabel sliderlabel4 = new JLabel("Line number", JLabel.LEFT);
 		sliderlabel4.setToolTipText("How many lines should create a car?");
 		JSlider slider4 = new JSlider(JSlider.HORIZONTAL, 2, 10,
-				(int) g.lineNumber);
+				(int) factory.lineNumber);
 		slider4.setToolTipText("How many lines should create a car?");
 		slider4.setMinorTickSpacing(1);
 		slider4.setMajorTickSpacing(8);
@@ -180,10 +182,10 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JSlider source = (JSlider) e.getSource();
 				if (!g.started) {
-					g.lineNumber = source.getValue();
+					factory.lineNumber = source.getValue();
 					g.changed = true;
 				} else {
-					source.setValue(g.lineNumber);
+					source.setValue(factory.lineNumber);
 				}
 			}
 		});
@@ -235,7 +237,7 @@ public class GeneticAlgorithmPanel {
 		JLabel sliderlabel7 = new JLabel("Crossover rate in percent",
 				JLabel.LEFT);
 		JSlider slider7 = new JSlider(JSlider.HORIZONTAL, 0, 100,
-				(int) g.cross.crossover);
+				(int) cross.crossover);
 		slider7.setMinorTickSpacing(5);
 		slider7.setMajorTickSpacing(100);
 		slider7.setPaintTicks(true);
@@ -247,7 +249,7 @@ public class GeneticAlgorithmPanel {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				JSlider source = (JSlider) e.getSource();
-				g.cross.crossover = source.getValue();
+				cross.crossover = source.getValue();
 			}
 		});
 
@@ -293,7 +295,7 @@ public class GeneticAlgorithmPanel {
 
 		JCheckBox cb1 = new JCheckBox("Fixed length?");
 		cb1.setToolTipText("Should the car length be fixed?");
-		cb1.setSelected(g.fixedLength);
+		cb1.setSelected(factory.fixedLength);
 		cb1.addItemListener(new ItemListener() {
 
 			@Override
@@ -301,16 +303,16 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JCheckBox cb = (JCheckBox) e.getSource();
 				if (!g.started) {
-					g.fixedLength = cb.isSelected();
+					factory.fixedLength = cb.isSelected();
 					g.changed = true;
 				} else
-					cb.setSelected(g.fixedLength);
+					cb.setSelected(factory.fixedLength);
 			}
 		});
 
 		JCheckBox cb2 = new JCheckBox("All-wheel drive?");
 		cb2.setToolTipText("Should every wheel have an engine?");
-		cb2.setSelected(g.allWheel);
+		cb2.setSelected(factory.allWheel);
 		cb2.addItemListener(new ItemListener() {
 
 			@Override
@@ -318,24 +320,25 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JCheckBox cb = (JCheckBox) e.getSource();
 				if (!g.started) {
-					g.allWheel = cb.isSelected();
+					factory.allWheel = cb.isSelected();
 					g.c.p.factory.setAllWheel(cb.isSelected());
 					g.changed = true;
 				} else
-					cb.setSelected(g.allWheel);
+					cb.setSelected(factory.allWheel);
 			}
 		});
 
 		JCheckBox cb3 = new JCheckBox("Fixed Bitmask?");
 		cb3.setToolTipText("Should the crossover bitmask be fixed?");
-		cb3.setSelected(g.cross.fixedMask);
+		
+		cb3.setSelected(cross.fixedMask);
 		cb3.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				JCheckBox cb = (JCheckBox) e.getSource();
-				g.cross.fixedMask = cb.isSelected();
+				cross.fixedMask = cb.isSelected();
 			}
 		});
 		JLabel choicelabel1 = new JLabel("What should be crossovered?",
@@ -358,22 +361,22 @@ public class GeneticAlgorithmPanel {
 				JComboBox selectedChoice = (JComboBox) e.getSource();
 				if (selectedChoice.getSelectedItem().equals(
 						"1 whole point (30 bits)")) {
-					g.cross.crType = 0;
+					g.crType = 0;
 				}
 				if (selectedChoice.getSelectedItem().equals(
 						"1 point x coordinate (10 bits)")) {
-					g.cross.crType = 1;
+					g.crType = 1;
 				}
 				if (selectedChoice.getSelectedItem().equals(
 						"1 point y coordinate (10 bits)")) {
-					g.cross.crType = 2;
+					g.crType = 2;
 				}
 				if (selectedChoice.getSelectedItem().equals(
 						"1 point length (10 bits)")) {
-					g.cross.crType = 3;
+					g.crType = 3;
 				}
 				if (selectedChoice.getSelectedItem().equals("Whole genome")) {
-					g.cross.crType = 4;
+					g.crType = 4;
 				}
 			}
 
@@ -397,19 +400,19 @@ public class GeneticAlgorithmPanel {
 				// TODO Auto-generated method stub
 				JComboBox selectedChoice = (JComboBox) e.getSource();
 				if (selectedChoice.getSelectedItem().equals("2 Point")) {
-					g.cross.crAlgorithm = 0;
+					g.crAlgorithm = 0;
 				}
 				if (selectedChoice.getSelectedItem().equals("1 Point")) {
-					g.cross.crAlgorithm = 1;
+					g.crAlgorithm = 1;
 				}
 				if (selectedChoice.getSelectedItem().equals("Uniform")) {
 					// Einkommentieren wenn Uniform vorhanden
 					// g.cross.crAlgorithm = 2;
-					g.cross.crAlgorithm = 0;
+					g.crAlgorithm = 0;
 					selectedChoice.setSelectedIndex(0);
 				}
 				if (selectedChoice.getSelectedItem().equals("Random")) {
-					g.cross.crAlgorithm = 3;
+					g.crAlgorithm = 3;
 				}
 
 			}

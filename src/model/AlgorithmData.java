@@ -39,9 +39,6 @@ public abstract class AlgorithmData {
 	 * 
 	 * @return Vehicle
 	 */
-	public Vehicle createVehicle() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract Vehicle createVehicle();
 
 }

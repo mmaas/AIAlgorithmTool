@@ -20,16 +20,13 @@ package geneticalgorithm;
 
 import java.util.Vector;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyType;
-
 import control.Algorithm;
 import control.Control;
 import view.OpenGLPlayTab;
 
 import model.AlgorithmData;
 import model.GeneticAlgorithmData;
+import model.LinesAlgorithmData;
 
 /***
  * Core of the genetic algorithm.
@@ -38,22 +35,20 @@ import model.GeneticAlgorithmData;
  * @version 1.0
  */
 public class GeneticAlgorithm extends Algorithm {
-	MutationOperator m = new MutationOperator(this);
-	CrossoverOperator cross = new CrossoverOperator(this);
-	GeneticAlgorithmPanel gap = new GeneticAlgorithmPanel(this);
-	FitnessFunction fit = new FitnessFunction(this);
-	SelectionOperator sel = new SelectionOperator(this);
-	GeneticAlgorithmDataFactory fac = new GeneticAlgorithmDataFactory(this);
-	public Control c;
-	public float maxLength;
-	public float maxHeight;
-	public float maxLineLength;
-	public int lineNumber;
+	GeneticAlgorithmDataFactory fac;
+	Mutation m;
+	Crossover cross;
+	GeneticAlgorithmPanel gap;
+	Fitness fit;
+	Selection sel;
+
 	public int population;
 	public int mutation;
-
-	public boolean started, changed, fixedLength, allWheel;
+	public int crType, crAlgorithm;
+	public boolean started, changed;
 	public boolean showBestcar;
+	float sumGeneration;
+	float best;
 	boolean showLatest;
 	boolean showOverall;
 	public boolean done;
@@ -62,36 +57,34 @@ public class GeneticAlgorithm extends Algorithm {
 	 * Constructor which takes arguments and sets default values, where there is
 	 * no argument.
 	 * 
-	 * @param maxLength
-	 *            maximum length of the cars
-	 * @param maxHeight
-	 *            maximum heigth of the cars
 	 * @param population
 	 *            population size
-	 * @param maxLineLength
-	 *            maximum y size of the lines
-	 * @param lineNumber
-	 *            count of lines
+	 * @param fac
+	 *            genom represantation factory
 	 * @param c
-	 *            a specific control from MVC
+	 *            control
 	 */
-	public GeneticAlgorithm(float maxLength, float maxHeight, int population,
-			int maxLineLength, int lineNumber, Control c) {
-		this.maxLength = maxLength;
-		this.maxHeight = maxHeight;
-		this.maxLineLength = maxLineLength;
-		this.lineNumber = lineNumber;
-		this.c = c;
+	public GeneticAlgorithm(int population, GeneticAlgorithmDataFactory fac,
+			Control c) {
+		super(c);
 		this.population = population;
+		this.fac = fac;
+		crType = 0;
+		crAlgorithm = 0;
 		mutation = 20;
+		sumGeneration = 0;
+		best = 0;
 		started = false;
 		changed = false;
-		fixedLength = true;
-		allWheel = true;
 		showBestcar = false;
 		showLatest = false;
 		showOverall = false;
 		done = false;
+		m = new MutationOperator(this);
+		cross = new CrossoverOperator(this);
+		gap = new GeneticAlgorithmPanel(this);
+		fit = new FitnessFunction(this);
+		sel = new SelectionOperator(this);
 		this.p = gap.createPanel();
 	}
 
@@ -117,18 +110,16 @@ public class GeneticAlgorithm extends Algorithm {
 	}
 
 	public void evaluate() {
+		float sumDistance = 0f;
 		int i = 1;
 		int j = 1;
 		OpenGLPlayTab pT = c.registeredViews.get(0).pTab;
 		pT.output.add("Generation " + i);
-		float sum = 0, best = 0;
 		while (aData.size() < population) {
-			fac.createData(true);
+			GeneticAlgorithmData gA = fac.createData();
+			aData.add(gA);
 
-			GeneticAlgorithmData gA = (GeneticAlgorithmData) aData
-					.lastElement();
-			
-			fit.fitness(gA, best);
+			fit.fitness(gA);
 
 			if (changed) {
 				aData.remove(aData.size() - 1);
@@ -137,51 +128,41 @@ public class GeneticAlgorithm extends Algorithm {
 			} else {
 				pT.output.add("Car " + j + ": " + gA.fitness);
 				pT.cars += 1;
-				sum += gA.fitness;
+				sumGeneration += gA.fitness;
+				sumDistance += gA.distance;
 			}
-			Body b = c.p.physicWorld.getBodyList();
-
-			while (b != null) {
-				if (b.m_type == BodyType.DYNAMIC) {
-					b.setActive(false);
-					c.p.physicWorld.destroyBody(b);
-				}
-				b = b.getNext();
-			}
-
-			c.p.vehicles.clear();
+			c.p.removeVehicle();
 			j++;
 		}
-		pT.output.add("Total fitness: " + sum);
-		pT.output.add("Average fitness: " + sum/population);
+		pT.output.add("Total fitness: " + sumGeneration);
+		pT.output.add("Average fitness: " + sumGeneration / population);
 		Vector<GeneticAlgorithmData> nextGeneration = new Vector<GeneticAlgorithmData>();
-		Vector<Vec2> rating = new Vector<Vec2>();
 		while (true) {
 			nextGeneration.clear();
-			rating.clear();
 			c.registeredViews.get(0).pTab.outputAlgorithmInformation.clear();
 			c.registeredViews.get(0).pTab.outputAlgorithmInformation
-					.add("Generation " + (i+1));
-
-			pT.output.add("Rate...");
-			rating = rate(i, sum);
+					.add("Generation " + (i + 1));
 
 			pT.output.add("Select...");
-			sel.selection(rating, nextGeneration);
+			sel.selection(i, nextGeneration);
 
 			pT.output.add("Crossover...");
-			cross.crossover(rating, nextGeneration);
-			
+			cross.crossover(i, nextGeneration);
+
 			pT.output.add("Mutate...");
 			m.mutate(nextGeneration);
 
-			GeneticAlgorithmData bestCar = (GeneticAlgorithmData) (aData
-					.get((int) rating.lastElement().x));
+			LinesAlgorithmData bestCar = (LinesAlgorithmData) nextGeneration
+					.firstElement();
 			best = bestCar.fitness;
-			pT.output.add("Best: " + best);
+			pT.output.add("Best fitness: " + best);
 			pT.output.add("******************************");
-			
-			sum = 0;
+
+//			System.out.println(i + " " + sumDistance + " " + sumDistance
+//					/ population + " " + bestCar.distance);
+
+			sumGeneration = 0;
+			sumDistance = 0;
 			i++;
 			j = (i - 1) * population + 1;
 			pT.output.add("Generation " + i);
@@ -194,18 +175,15 @@ public class GeneticAlgorithm extends Algorithm {
 					showBest(i);
 					showBestcar = false;
 				}
-				fit.fitness((GeneticAlgorithmData) aData.lastElement(), best);
+				fit.fitness((LinesAlgorithmData) aData.lastElement());
 				if (!done) {
 					pT.output.add("Car " + (j + k) + ": "
 							+ nextGeneration.elementAt(k).fitness);
 				}
 				pT.cars += 1;
-				sum += nextGeneration.elementAt(k).fitness;
-				for (Body b : c.p.vehicles) {
-					b.setActive(false);
-					c.p.physicWorld.destroyBody(b);
-				}
-				c.p.vehicles.clear();
+				sumGeneration += nextGeneration.elementAt(k).fitness;
+				sumDistance += nextGeneration.elementAt(k).distance;
+				c.p.removeVehicle();
 				if (done) {
 					k--;
 					String s = "The last car has finished the track.";
@@ -213,8 +191,8 @@ public class GeneticAlgorithm extends Algorithm {
 						pT.output.add(s);
 				}
 			}
-			pT.output.add("Total fitness: " + sum);
-			pT.output.add("Average fitness: " + sum/population);
+			pT.output.add("Total fitness: " + sumGeneration);
+			pT.output.add("Average fitness: " + sumGeneration / population);
 		}
 
 	}
@@ -228,64 +206,37 @@ public class GeneticAlgorithm extends Algorithm {
 	private void showBest(int generation) {
 		float bestDistance = 0f;
 		int best = 0;
-		GeneticAlgorithmData ga;
+		LinesAlgorithmData ga;
 		if (showLatest) {
 			for (int i = (generation - 2) * population; i < (generation - 2)
 					* population + population; i++) {
-				ga = (GeneticAlgorithmData) aData.get(i);
+				ga = (LinesAlgorithmData) aData.get(i);
 				if (ga.distance > bestDistance) {
 					bestDistance = ga.distance;
 					best = i;
 				}
 			}
-			ga = (GeneticAlgorithmData) aData.get(best);
+			ga = (LinesAlgorithmData) aData.get(best);
 			c.registeredViews.get(0).pTab.output
-					.add(("Show best car " + (best + 1)
-							+ " with distance " + bestDistance + " again"));
-			fit.fitness(ga, bestDistance);
+					.add(("Show best car " + (best + 1) + " with distance "
+							+ bestDistance + " again"));
+			fit.fitness(ga);
 			showLatest = false;
 		} else if (showOverall) {
 			for (int i = 0; i < (generation - 2) * population + population; i++) {
-				ga = (GeneticAlgorithmData) aData.get(i);
+				ga = (LinesAlgorithmData) aData.get(i);
 				if (ga.distance > bestDistance) {
 					bestDistance = ga.distance;
 					best = i;
 				}
 			}
-			ga = (GeneticAlgorithmData) aData.get(best);
+			ga = (LinesAlgorithmData) aData.get(best);
 			c.registeredViews.get(0).pTab.output
 					.add(("Show total best car " + (best + 1)
 							+ " with distance " + bestDistance + " again"));
-			fit.fitness(ga, bestDistance);
+			fit.fitness(ga);
 			showOverall = false;
 		}
-	}
-
-	/***
-	 * Normalizes fitness from a generation to a specific total fitness.
-	 * 
-	 * @param generation
-	 *            generation which should be rated
-	 * @param fitness
-	 *            total fitness of the generation which should be rated
-	 * @return sorted vector with genoms and their normalized rating in percent
-	 */
-	private Vector<Vec2> rate(int generation, float fitness) {
-		GeneticAlgorithmData gA;
-		Vector<Vec2> rating = new Vector<Vec2>();
-		for (int i = (generation - 1) * population; i < generation * population; i++) {
-			gA = (GeneticAlgorithmData) aData.get(i);
-			rating.add(new Vec2(i, gA.fitness / fitness));
-		}
-		java.util.Collections.sort(rating, new Vec2Comparator());
-		// System.out.print((int) rating.firstElement().x + ","
-		// + rating.firstElement().y + " ");
-		for (int i = 1; i < population; i++) {
-			rating.get(i).y = rating.get(i).y + rating.get(i - 1).y;
-			// System.out.print((int) rating.get(i).x + "," + rating.get(i).y
-			// + " ");
-		}
-		return rating;
 	}
 
 }

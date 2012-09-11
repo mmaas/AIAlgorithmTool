@@ -39,6 +39,12 @@ public class Control {
 	protected Model m;
 	public Vector<View> registeredViews;
 
+	/***
+	 * Simple constructor 
+	 * @param p physic
+	 * @param a algorithm
+	 * @param m model
+	 */
 	public Control(Physic p, Algorithm a, Model m) {
 		this.p = p;
 		this.a = a;
