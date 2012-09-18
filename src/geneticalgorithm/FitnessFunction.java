@@ -57,7 +57,7 @@ public class FitnessFunction implements Fitness {
 			if (!gA.c.registeredViews.get(0).pTab.pause) {
 				gA.c.step();
 				newPosition = Math.round(b.getPosition().x * 100f) / 100f;
-				if (newPosition >= 2500)
+				if (newPosition >= 5000)
 					break;
 				if (gA.c.registeredViews.get(0).toggleStatus) {
 					try {
@@ -88,18 +88,21 @@ public class FitnessFunction implements Fitness {
 				g.fitness = Math.round(maxPosition * 100.f) / 100.f;
 				g.distance = g.fitness;
 			} else if (maxPosition > gA.best) {
-				g.fitness = gA.best;
+				// Linear fitness function
+				 g.fitness = Math.round(maxPosition * 100.f) / 100.f;
 
-				g.fitness += (maxPosition - gA.best) * Math.log(gA.best);
+				// Non linear fitness function
+//				g.fitness = gA.best;
+//				g.fitness += (maxPosition - gA.best) * Math.log(gA.best);
+//				g.fitness = Math.round((g.fitness * 100f) / 100f);
 
-				g.fitness = Math.round((g.fitness * 100f) / 100f);
 				g.distance = Math.round(maxPosition * 100.f) / 100.f;
 			} else {
 				g.fitness = Math.round(maxPosition * 100.f) / 100.f;
 				g.distance = g.fitness;
 			}
 		}
-		if (g.distance > 2499) {
+		if (g.distance > 4999) {
 			gA.done = true;
 		}
 	}

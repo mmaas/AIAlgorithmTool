@@ -158,8 +158,8 @@ public class GeneticAlgorithm extends Algorithm {
 			pT.output.add("Best fitness: " + best);
 			pT.output.add("******************************");
 
-//			System.out.println(i + " " + sumDistance + " " + sumDistance
-//					/ population + " " + bestCar.distance);
+			System.out.println(i + " " + sumDistance
+					/ population + " " + bestCar.distance);
 
 			sumGeneration = 0;
 			sumDistance = 0;
@@ -176,20 +176,20 @@ public class GeneticAlgorithm extends Algorithm {
 					showBestcar = false;
 				}
 				fit.fitness((LinesAlgorithmData) aData.lastElement());
-				if (!done) {
+//				if (!done) {
 					pT.output.add("Car " + (j + k) + ": "
 							+ nextGeneration.elementAt(k).fitness);
-				}
+//				}
 				pT.cars += 1;
 				sumGeneration += nextGeneration.elementAt(k).fitness;
 				sumDistance += nextGeneration.elementAt(k).distance;
 				c.p.removeVehicle();
-				if (done) {
-					k--;
-					String s = "The last car has finished the track.";
-					if (!pT.output.lastElement().equals(s))
-						pT.output.add(s);
-				}
+//				if (done) {
+//					k--;
+//					String s = "The last car has finished the track.";
+//					if (!pT.output.lastElement().equals(s))
+//						pT.output.add(s);
+//				}
 			}
 			pT.output.add("Total fitness: " + sumGeneration);
 			pT.output.add("Average fitness: " + sumGeneration / population);

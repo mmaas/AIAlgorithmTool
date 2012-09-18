@@ -59,7 +59,7 @@ public class Start {
 		control.initPhysic(1.0f / 60.0f, 8, 3);
 
 		LinesAlgorithmDataFactory factory = new LinesAlgorithmDataFactory(5f,8f,8f,5);
-		g = new GeneticAlgorithm(50, factory, control);
+		g = new GeneticAlgorithm(100, factory, control);
 
 		v = new View(control, m, g, control.getPhysicWorld());
 		control.addView(v);

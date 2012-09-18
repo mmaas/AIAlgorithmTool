@@ -85,7 +85,7 @@ public class World {
 				false, this);
 		addPart(p);
 		float gradient = 0, distance = 0, maxGradient = 0;
-		while (x < 2500) {
+		while (x < 5000) {
 			Vec2[] vec = new Vec2[4];
 			vec[0] = new Vec2(start[3].x, start[3].y);
 			vec[1] = new Vec2(start[3].x, start[3].y - 0.75f);
@@ -98,7 +98,7 @@ public class World {
 				distance = 0;
 			}
 			if (maxGradient < 0.4f)
-				maxGradient = (float) (0.2f + (x / 25) * 0.05);
+				maxGradient = (float) (0.2f + (x / 25) * 0.003);
 			if ((distance > 0f) && gradient / distance > maxGradient) {
 				do {
 					r = (float) (Math.random() * maxGradient * 5 - maxGradient * 2.5f);
