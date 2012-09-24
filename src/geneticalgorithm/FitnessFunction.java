@@ -89,12 +89,12 @@ public class FitnessFunction implements Fitness {
 				g.distance = g.fitness;
 			} else if (maxPosition > gA.best) {
 				// Linear fitness function
-				 g.fitness = Math.round(maxPosition * 100.f) / 100.f;
+//				 g.fitness = Math.round(maxPosition * 100.f) / 100.f;
 
 				// Non linear fitness function
-//				g.fitness = gA.best;
-//				g.fitness += (maxPosition - gA.best) * Math.log(gA.best);
-//				g.fitness = Math.round((g.fitness * 100f) / 100f);
+				g.fitness = gA.best;
+				g.fitness += (maxPosition - gA.best) * Math.log(gA.best);
+				g.fitness = Math.round((g.fitness * 100f) / 100f);
 
 				g.distance = Math.round(maxPosition * 100.f) / 100.f;
 			} else {

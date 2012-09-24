@@ -71,7 +71,7 @@ public class GeneticAlgorithm extends Algorithm {
 		this.fac = fac;
 		crType = 0;
 		crAlgorithm = 0;
-		mutation = 20;
+		mutation = 70;
 		sumGeneration = 0;
 		best = 0;
 		started = false;
